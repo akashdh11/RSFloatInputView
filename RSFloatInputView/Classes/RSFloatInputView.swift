@@ -2,11 +2,11 @@ import UIKit
 import CoreText
 
 open class RSFloatInputView: UIView {
-  open static var stringTransformer: ((String) -> String?)! = {
+  public static var stringTransformer: ((String) -> String?)! = {
     orginal in
     return orginal
   }
-  open static var instanceTransformer: ((RSFloatInputView) -> Void)! = {
+  public static var instanceTransformer: ((RSFloatInputView) -> Void)! = {
     orginal in
   }
   
@@ -67,14 +67,26 @@ open class RSFloatInputView: UIView {
     changeToIdle(animated: false)
   }
   
-  open func configFontsAndColors() {
-    placeHolderLabel.font = CGFont(placeHolderFontKey as CFString)
-    textField.textColor = textColor
-    textField.font = UIFont(name: inputFontName, size: inputFontSize)
-    textField.tintColor = tintColor
-    separatorView.backgroundColor = separatorColor
-  }
-  
+//  open func configFontsAndColors() {
+//    placeHolderLabel.font = CGFont(placeHolderFontKey as CFString)
+//    textField.textColor = textColor
+//    textField.font = UIFont(name: inputFontName, size: inputFontSize)
+//    textField.tintColor = tintColor
+//    separatorView.backgroundColor = separatorColor
+//  }
+        open func configFontsAndColors() {
+            let font = UIFont.systemFont(ofSize: 14.0)
+            let fontName = font.fontName as NSString
+            let cgFont = CGFont(fontName)
+            let copiedFont = cgFont!.copy(withVariations: nil)
+            placeHolderLabel.font = copiedFont//CGFont(placeHolderFontKey as CFString)
+            textField.textColor = textColor
+            textField.font = UIFont.systemFont(ofSize: 15.0)//UIFont(name: inputFontName, size: inputFontSize)
+            textField.tintColor = tintColor
+            separatorView.backgroundColor = separatorColor
+
+        }
+    
   override open func layoutSubviews() {
     super.layoutSubviews()
     layout()
@@ -90,8 +102,9 @@ open class RSFloatInputView: UIView {
     } else {
       iconImageView.isHidden = true
     }
-    let placeHolderUIFont = state == .idle ? UIFont(name: placeHolderFontKey, size: idlePlaceHolderFontSize) : UIFont(name: placeHolderFontKey, size: floatPlaceHolderFontSize)
-    let placeHolderHeight: CGFloat = placeHolderUIFont!.lineHeight + 2
+    let placeHolderUIFont = state == .idle ? UIFont.systemFont(ofSize: idlePlaceHolderFontSize) : UIFont.systemFont(ofSize: floatPlaceHolderFontSize)
+  //  let placeHolderUIFont = state == .idle ? UIFont(name: placeHolderFontKey, size: idlePlaceHolderFontSize) : UIFont(name: placeHolderFontKey, size: floatPlaceHolderFontSize)
+      let placeHolderHeight: CGFloat = placeHolderUIFont.lineHeight + 2
     let textFieldHeight = textField.font!.lineHeight + 2
     let inputHeight = placeHolderHeight + textInnerPadding + textFieldHeight
     let widthForInput = viewWidth - currentX - rightInset
@@ -111,7 +124,7 @@ open class RSFloatInputView: UIView {
     state = .float
     CATransaction.begin()
     CATransaction.setAnimationDuration(animationDuration)
-    CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut))
+      CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut))
     placeHolderLabel.foregroundColor = floatPlaceHolderColor.cgColor
     placeHolderLabel.fontSize = floatPlaceHolderFontSize
     layout()
@@ -131,7 +144,7 @@ open class RSFloatInputView: UIView {
     state = .idle
     CATransaction.begin()
     CATransaction.setAnimationDuration(animationDuration)
-    CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut))
+      CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut))
     placeHolderLabel.foregroundColor = idlePlaceHolderColor.cgColor
     placeHolderLabel.fontSize = idlePlaceHolderFontSize
     layout()
